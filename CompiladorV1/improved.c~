@@ -1,0 +1,89 @@
+/*Parser Revisado*/
+#include <stdio.h>
+#include "lex.h"
+
+void factor 	(void);
+void term	(void);
+void expression	(void);
+
+statements()
+{
+	/*statemnts -> expression SEMI | expression SEMI statements */
+	while (!match (EOI))
+	{
+		expression();
+		if(match(SEMI))
+			advance();
+		else
+			fprintf(stderr, "%d: Inserting mising semicolon\n", yylineno);
+	}
+}
+void expression()
+{
+	/*expression ->	term expression'
+	 *expression ->	PLUS term expression' | epsilon
+	 */
+	if(!legal_lookahead(NUM_OR_ID, LP, O))
+		return;
+	term();
+	while(match(PLUS))
+	{
+		advance();
+		term();
+	}
+}
+void term()
+{
+	if(!legal_lookahead(NUM_OR_ID, LP, 0))
+		return;
+	factor();
+	while(match(TIMES))
+	{
+		advance();;
+		factor();
+	}
+}
+void factor()
+{
+	if(!legal_lookahead (NUM_OR_ID, LP, O)
+			return;
+	if(match(NUM_OR_ID)
+		advance();
+	else if(match(LP))
+	     {
+			advance();
+			expression();
+			if(match(RP))
+				advance();
+			else
+				fprintf(stderr,"%d: Mmismatched parenthesis\n", yylineno);
+	     }
+	     else
+	     	fprintf(stderr,"%d: Number of identifier expected\n", yylineno);
+}
+#include <stdarg.h>
+
+#define MAXFIRST	16
+#define SYNCH		SEMI
+
+int	legal_lookahead(first_arg)
+int firts_arg;
+{
+	/*Simple error detection annd recovery. Arguments are a 0-terminated list of 
+	 * those tokens that can legimitately come next in the input. if the list is empty,
+	 * the end of file must coe nest. Print an error message if necessary. Error recovery is
+	 * performed by discarding all input symbols until one that's in the input is found
+	 *
+	 * Return true if there's no error or if we recoreverd from the error,
+	 * flase if we can't recover.
+	 */
+	va_list		args;
+	int		tok;
+	int		lookaheads[MAXFIRST], *p = lookaheads, *current;
+
+}
+
+
+	
+
+
