@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include "lex.h"
+
+void	factor		(char	*tempvar);
+void	term		(char 	*tempvar);
+void 	expression	(char	*tempvar);
+
+extern	char	*newname(void		);
+extern	void	freename(char	*name);
+
+statements()
+{
+	/*statements->expression SEMI | expression SEMI statements */
+	char *tempvar;
+	while(!match(EOI))
+	{
+		expression(temvar = newname());
+		freename(tempvar);
+		if (match(SEMI))
+			advance();
+		else
+			fprintf(stderr, "%d: Inserting missing semicolon\n", yylineno);
+	}
+}
+void	expression(tempvar)
+char *tempvar;
+{
+	/*expression -> term expression'
+	 * exprresion -> PLUS term expression' 	| epsilon
+	 */
+	char *tempvar2;
+
+	term(tempvar);
+	while(match(PLUS))
+	{
+		advance();
+		term(tempvar2 = newname());
+		printf("	%s += %%\n", tempvar, tempvar2);
+		freename(tempvar2);
+	}
+}
+
